@@ -9,7 +9,7 @@ import pystray
 
 CONFIG_FILE = "config.json"
 VALID_USERNAME = "admin"
-VALID_PASSWORD = "1@43#B@la"
+VALID_PASSWORD = "1@43"
 
 class FileCleanerApp:
     def __init__(self, root):
@@ -50,8 +50,6 @@ class FileCleanerApp:
         tk.Label(self.root, text="Password").pack(pady=5)
         tk.Entry(self.root, textvariable=self.password_var, show="*").pack()
         tk.Button(self.root, text="Login", command=self.login).pack(pady=15)
-        
-        tk.Label(self.root, text="Process@2025 # 70599").pack(pady=5)
 
     def login(self):
         if self.username_var.get() == VALID_USERNAME and self.password_var.get() == VALID_PASSWORD:
@@ -64,7 +62,6 @@ class FileCleanerApp:
         self.main_window = tk.Toplevel()
         self.main_window.title("File Cleaner")
         self.main_window.geometry("400x250")
-        self.main_window.resizable(False, False)
         self.main_window.protocol("WM_DELETE_WINDOW", self.minimize_to_tray)
 
         tk.Label(self.main_window, text="Folder Path").pack(pady=5)
@@ -76,8 +73,6 @@ class FileCleanerApp:
 
         tk.Button(self.main_window, text="Start Deletion", command=self.start_loop).pack(pady=10)
         tk.Button(self.main_window, text="Stop Deletion", command=self.stop_loop).pack()
-        
-        tk.Label(self.main_window, text="Process@2025 # 70599").pack(pady=5)
 
     def protected_browse(self):
         pwd = simpledialog.askstring("Password Required", "Enter password to change path:", show='*')
@@ -115,19 +110,13 @@ class FileCleanerApp:
         while self.is_running:
             path = self.path_var.get()
             delay = int(self.delay_var.get())
-            now = time.time()
-
             for filename in os.listdir(path):
                 file_path = os.path.join(path, filename)
                 try:
                     if os.path.isfile(file_path):
-                        file_age = now - os.path.getmtime(file_path)  # last modified time
-                        if file_age >= delay:
-                            os.remove(file_path)
-                            print(f"Deleted: {file_path}")
+                        os.remove(file_path)
                 except Exception as e:
                     print(f"Error deleting {file_path}: {e}")
-            
             time.sleep(delay)
 
     def minimize_to_tray(self):
